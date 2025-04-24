@@ -82,7 +82,7 @@ const onAdd = () => {
   if (isValidTransaction.value) {
     emit('add', {
       text: newTransaction.value.text,
-      amount: newTransaction.value.amount
+      amount: Number(newTransaction.value.amount)
     });
     onClose();
   }

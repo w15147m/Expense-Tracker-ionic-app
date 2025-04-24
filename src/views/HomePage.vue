@@ -27,19 +27,19 @@
 
 <script setup>
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { addOutline } from 'ionicons/icons';
 import BalanceCard from '@/components/BalanceCard.vue';
 import TransactionList from '@/components/TransactionList.vue';
 import AddTransactionModal from '@/components/AddTransactionModal.vue';
+import { storageService } from '@/services/storage.service';
 
 const isModalOpen = ref(false);
-const transactions = ref([
-  { id: 1, text: 'Flower', amount: -19.99 },
-  { id: 2, text: 'Salary', amount: 299.97 },
-  { id: 3, text: 'Book', amount: -10 },
-  { id: 4, text: 'Camera', amount: 150 }
-]);
+const transactions = ref([]);
+
+onMounted(async () => {
+  transactions.value = await storageService.getTransactions();
+});
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -49,15 +49,16 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-const addTransaction = (transaction) => {
-  transactions.value.push({
+const addTransaction = async (transaction) => {
+  const newTransaction = {
     id: Date.now(),
     ...transaction
-  });
+  };
+  transactions.value = await storageService.addTransaction(newTransaction);
 };
 
-const deleteTransaction = (id) => {
-  transactions.value = transactions.value.filter(t => t.id !== id);
+const deleteTransaction = async (id) => {
+  transactions.value = await storageService.deleteTransaction(id);
 };
 </script>
 
