@@ -2,17 +2,17 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title class="ion-text-center app-title">💰 Expense Tracker</ion-title>
+        <ion-title class="ion-text-center fw-boldest font-20 text-white">💰 Expense Tracker</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" class="ion-padding gradient-background">
+    <ion-content :fullscreen="true" class="ion-padding bg-dark">
       <BalanceCard :transactions="transactions" />
       <TransactionList :transactions="transactions" @delete="deleteTransaction" @edit="editTransaction" />
     </ion-content>
 
     <ion-fab vertical="bottom" horizontal="end" :fixed="true">
-      <ion-fab-button @click="openModal" class="fab-button">
+      <ion-fab-button @click="openModal" class="bg-success m-b-16 m-r-16">
         <ion-icon :icon="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -65,23 +65,3 @@ const deleteTransaction = async (id) => {
   transactions.value = await storageService.deleteTransaction(id);
 };
 </script>
-
-<style scoped>
-.gradient-background {
-  --background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 100%);
-}
-
-.app-title {
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: #e0e0e0;
-}
-
-.fab-button {
-  --background: #4caf50;
-  --background-hover: #45a049;
-  --background-activated: #45a049;
-  margin-bottom: 16px;
-  margin-right: 16px;
-}
-</style>
