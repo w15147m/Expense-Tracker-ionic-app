@@ -1,20 +1,20 @@
 <template>
-  <div class="balance-section">
-    <h2 class="balance-label">YOUR BALANCE</h2>
-    <h1 class="balance-amount">${{ totalBalance.toFixed(2) }}</h1>
+  <div class="text-center m-b-24 pd-20">
+    <h2 class="text-gray-400 fs-16 fw-600 m-0">YOUR BALANCE</h2>
+    <h1 class="fs-40 fw-700 m-10-0 text-white">${{ totalBalance.toFixed(2) }}</h1>
 
-    <ion-card class="summary-card">
+    <ion-card class="br-16 shadow-4 bg-dark-50 m-20-0">
       <ion-row>
         <ion-col>
-          <div class="income-expense">
-            <h3>INCOME</h3>
-            <p class="income">+${{ totalIncome.toFixed(2) }}</p>
+          <div class="text-center pd-20">
+            <h3 class="m-0 text-uppercase fs-14 fw-600 text-gray-400">INCOME</h3>
+            <p class="text-success fs-24 fw-700 m-10-0">+${{ totalIncome.toFixed(2) }}</p>
           </div>
         </ion-col>
-        <ion-col class="divider">
-          <div class="income-expense">
-            <h3>EXPENSE</h3>
-            <p class="expense">-${{ totalExpense.toFixed(2) }}</p>
+        <ion-col class="border-l-1 border-dark-100">
+          <div class="text-center pd-20">
+            <h3 class="m-0 text-uppercase fs-14 fw-600 text-gray-400">EXPENSE</h3>
+            <p class="text-danger fs-24 fw-700 m-10-0">-${{ totalExpense.toFixed(2) }}</p>
           </div>
         </ion-col>
       </ion-row>

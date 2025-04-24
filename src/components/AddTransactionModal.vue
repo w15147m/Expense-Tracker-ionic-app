@@ -89,23 +89,4 @@ const onAdd = () => {
     onClose();
   }
 };
-</script>
-
-<style>
-@media (min-width: 768px) {
-  ion-modal {
-    --width: 400px;
-    --height: 450px;
-    --border-radius: 16px;
-  }
-}
-
-/* Fix for Ionic input overlapping */
-ion-item::part(native) {
-  padding: 0;
-}
-
-ion-input::part(native) {
-  padding: 0;
-}
-</style> 
+</script> 
