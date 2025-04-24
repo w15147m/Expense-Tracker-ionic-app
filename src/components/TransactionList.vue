@@ -1,11 +1,11 @@
 <template>
-  <div class="history-section">
-    <h2 class="section-title">
-      <ion-icon name="time-outline"></ion-icon>
+  <div class="m-t-24">
+    <h2 class="d-flex align-center gap-8 fs-20 text-white m-b-16">
+      <ion-icon name="time-outline" class="fs-24 text-success"></ion-icon>
       History
     </h2>
-    <div class="scrollable-list">
-      <ion-list class="transaction-list">
+    <div class="h-calc-100vh-380 overflow-y-auto pd-r-8 m-r-n8 scrollbar-custom">
+      <ion-list class="bg-transparent pd-0">
         <TransactionItem
           v-for="transaction in transactions"
           :key="transaction.id"
@@ -38,53 +38,4 @@ const onDelete = (id) => {
 const onEdit = (transaction) => {
   emit('edit', transaction);
 };
-</script>
-
-<style scoped>
-.history-section {
-  margin-top: 24px;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1.2rem;
-  color: #e0e0e0;
-  margin-bottom: 16px;
-}
-
-.section-title ion-icon {
-  font-size: 1.4rem;
-  color: #4caf50;
-}
-
-.transaction-list {
-  background: transparent;
-}
-
-.scrollable-list {
-  max-height: calc(100vh - 380px);
-  overflow-y: auto;
-  padding-right: 8px;
-  margin-right: -8px;
-}
-
-.scrollable-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollable-list::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-}
-
-.scrollable-list::-webkit-scrollbar-thumb {
-  background: rgba(76, 175, 80, 0.3);
-  border-radius: 3px;
-}
-
-ion-list {
-  padding: 0;
-}
-</style> 
+</script> 
