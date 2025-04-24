@@ -1,0 +1,31 @@
+// Write your custom css/scss here
+.custom{
+   display: block;
+}
+
+.dropdown{
+    .filter_modal{
+        // background-color: #6571ff !important;
+        width: 500px;
+    }
+    .filter_btn{
+        border-top-right-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+        padding: 5.6px 7px;
+    }
+}
+
+.btn-group{
+    .filter{
+        border-radius: 4px !important;
+        padding: 6px 6.5px;
+    }
+}
+
+.filter_search{
+    padding: 5px;
+}
+
+.clear_filter{
+    padding: 6px;
+}

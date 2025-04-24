@@ -20,6 +20,9 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+/* Ionicons CSS */
+import '@ionic/vue/css/ionic.bundle.css';
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------

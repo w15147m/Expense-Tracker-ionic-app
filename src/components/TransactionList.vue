@@ -1,7 +1,7 @@
 <template>
   <div class="history-section">
     <h2 class="section-title">
-      <ion-icon :icon="timeOutline"></ion-icon>
+      <ion-icon name="time-outline"></ion-icon>
       History
     </h2>
     <div class="scrollable-list">
@@ -11,6 +11,7 @@
           :key="transaction.id"
           :transaction="transaction"
           @delete="onDelete"
+          @edit="onEdit"
         />
       </ion-list>
     </div>
@@ -19,7 +20,6 @@
 
 <script setup>
 import { IonList, IonIcon } from '@ionic/vue';
-import { timeOutline } from 'ionicons/icons';
 import TransactionItem from './TransactionItem.vue';
 
 const props = defineProps({
@@ -29,10 +29,14 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['delete']);
+const emit = defineEmits(['delete', 'edit']);
 
 const onDelete = (id) => {
   emit('delete', id);
+};
+
+const onEdit = (transaction) => {
+  emit('edit', transaction);
 };
 </script>
 

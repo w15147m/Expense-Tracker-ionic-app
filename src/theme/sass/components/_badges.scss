@@ -1,0 +1,13 @@
+// Badges
+
+a.badge { // for link badges
+  &:hover {
+    color: $white;
+  }
+}
+// Inverse buttons 
+@each $color, $value in $theme-colors {
+  .badge-inverse-#{$color} {
+    @include badge-inverse-variant($value);
+  }
+}

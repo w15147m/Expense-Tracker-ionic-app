@@ -1,0 +1,1 @@
+sonar-scanner.bat -D"sonar.projectKey=tracklo_test" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_c2a3381cac3d4f96996417f0d95912084ae88101"

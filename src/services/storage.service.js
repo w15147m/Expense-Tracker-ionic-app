@@ -37,6 +37,20 @@ class StorageService {
     return transactions;
   }
 
+  async editTransaction(id, updatedTransaction) {
+    const transactions = await this.getTransactions();
+    const index = transactions.findIndex(t => t.id === id);
+    if (index !== -1) {
+      transactions[index] = {
+        ...transactions[index],
+        ...updatedTransaction,
+        amount: Number(updatedTransaction.amount)
+      };
+      await this.saveTransactions(transactions);
+    }
+    return transactions;
+  }
+
   async deleteTransaction(id) {
     const transactions = await this.getTransactions();
     const updatedTransactions = transactions.filter(t => t.id !== id);

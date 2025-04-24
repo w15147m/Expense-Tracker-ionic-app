@@ -8,12 +8,12 @@
 
     <ion-content :fullscreen="true" class="ion-padding gradient-background">
       <BalanceCard :transactions="transactions" />
-      <TransactionList :transactions="transactions" @delete="deleteTransaction" />
+      <TransactionList :transactions="transactions" @delete="deleteTransaction" @edit="editTransaction" />
     </ion-content>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" :fixed="true">
       <ion-fab-button @click="openModal" class="fab-button">
-        <ion-icon :icon="addOutline"></ion-icon>
+        <ion-icon :icon="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
 
@@ -28,7 +28,7 @@
 <script setup>
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import { ref, onMounted } from 'vue';
-import { addOutline } from 'ionicons/icons';
+import { add } from 'ionicons/icons';
 import BalanceCard from '@/components/BalanceCard.vue';
 import TransactionList from '@/components/TransactionList.vue';
 import AddTransactionModal from '@/components/AddTransactionModal.vue';
@@ -55,6 +55,10 @@ const addTransaction = async (transaction) => {
     ...transaction
   };
   transactions.value = await storageService.addTransaction(newTransaction);
+};
+
+const editTransaction = async (transaction) => {
+  transactions.value = await storageService.editTransaction(transaction.id, transaction);
 };
 
 const deleteTransaction = async (id) => {

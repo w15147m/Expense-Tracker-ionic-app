@@ -11,6 +11,13 @@ export default defineConfig({
     vue(),
     legacy()
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/theme/sass/app.scss";`
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
