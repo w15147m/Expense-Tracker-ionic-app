@@ -37,29 +37,20 @@
         <div class="scrollable-list">
           <ion-list class="transaction-list">
             <ion-item-sliding v-for="transaction in transactions" :key="transaction.id">
-              <ion-item 
-                lines="none" 
-                class="transaction-item" 
-                :class="transaction.amount > 0 ? 'income-border' : 'expense-border'"
-                @click="openEditModal(transaction)"
-              >
+              <ion-item lines="none" class="transaction-item" :class="transaction.amount > 0 ? 'income-border' : 'expense-border'">
                 <ion-label>
                   <h2>{{ transaction.text }}</h2>
                   <p>{{ new Date().toLocaleDateString() }}</p>
                 </ion-label>
-                <div class="amount-container">
-                  <ion-note :class="transaction.amount > 0 ? 'income-text' : 'expense-text'">
-                    {{ transaction.amount > 0 ? '+' : '' }}${{ Math.abs(transaction.amount).toFixed(2) }}
-                  </ion-note>
-                  <ion-button 
-                    fill="clear" 
-                    class="delete-button" 
-                    @click.stop="(event) => handleDelete(event, transaction.id)"
-                  >
-                    <ion-icon :icon="trashOutline" color="danger"></ion-icon>
-                  </ion-button>
-                </div>
+                <ion-note slot="end" :class="transaction.amount > 0 ? 'income-text' : 'expense-text'">
+                  {{ transaction.amount > 0 ? '+' : '' }}${{ Math.abs(transaction.amount).toFixed(2) }}
+                </ion-note>
               </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" @click="deleteTransaction(transaction.id)">
+                  <ion-icon slot="icon-only" :icon="trashOutline"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
             </ion-item-sliding>
           </ion-list>
         </div>
@@ -80,7 +71,7 @@
           <ion-title>Add Transaction</ion-title>
           <ion-buttons slot="end">
             <ion-button @click="closeModal">
-              <ion-icon :icon="closeOutline"></ion-icon>
+              <ion-icon :icon="closeOutline" slot="icon-only"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
@@ -105,134 +96,45 @@
             </ion-item>
 
             <ion-button expand="block" @click="addTransaction" class="add-button" :disabled="!isValidTransaction">
-              <ion-icon :icon="addOutline"></ion-icon>
+              <ion-icon :icon="addOutline" slot="start"></ion-icon>
               Add Transaction
             </ion-button>
           </ion-card-content>
         </ion-card>
-      </ion-content>
+    </ion-content>
     </ion-modal>
-
-    <!-- Modal for Editing Transaction -->
-    <ion-modal :is-open="isEditModalOpen" @didDismiss="closeEditModal" class="transaction-modal">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Edit Transaction</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="closeEditModal">
-              <ion-icon :icon="closeOutline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-content class="ion-padding">
-        <ion-card class="form-card">
-          <ion-card-content>
-            <ion-item class="custom-input">
-              <ion-label position="floating">Description</ion-label>
-              <ion-input v-model="editingTransaction.text" placeholder="What's this transaction?"></ion-input>
-            </ion-item>
-
-            <ion-item class="custom-input">
-              <ion-label position="floating">Amount</ion-label>
-              <ion-input 
-                v-model="editingTransaction.amount" 
-                type="number" 
-                placeholder="Enter amount (- for expense)"
-                :class="editingTransaction.amount && editingTransaction.amount > 0 ? 'income-input' : editingTransaction.amount < 0 ? 'expense-input' : ''">
-              </ion-input>
-            </ion-item>
-
-            <ion-button expand="block" @click="updateTransaction" class="add-button" :disabled="!isValidEditTransaction">
-              <ion-icon :icon="addOutline"></ion-icon>
-              Update Transaction
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-content>
-    </ion-modal>
-
-    <ion-alert
-      :is-open="showDeleteAlert"
-      header="Delete Transaction"
-      message="Are you sure you want to delete this transaction?"
-      :buttons="[
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            showDeleteAlert.value = false;
-            transactionToDelete.value = null;
-          }
-        },
-        {
-          text: 'Delete',
-          role: 'destructive',
-          handler: confirmDelete
-        }
-      ]"
-      @didDismiss="showDeleteAlert = false"
-    ></ion-alert>
   </ion-page>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue';
+<script setup lang="ts">
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonRow, IonCol, 
+         IonList, IonItem, IonLabel, IonInput, IonButton, IonNote, IonCardContent,
+         IonItemSliding, IonItemOption, IonItemOptions, IonIcon, IonFab, IonFabButton,
+         IonModal, IonButtons } from '@ionic/vue';
+import { ref, computed } from 'vue';
 import { timeOutline, addOutline, trashOutline, closeOutline } from 'ionicons/icons';
-import { initStorage, setData, getData, STORAGE_KEYS } from '../utils/storage';
 
-// Import Ionic components
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonRow,
-  IonCol,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonNote,
-  IonCardContent,
-  IonItemSliding,
-  IonItemOption,
-  IonItemOptions,
-  IonIcon,
-  IonFab,
-  IonFabButton,
-  IonModal,
-  IonButtons,
-  IonAlert
-} from '@ionic/vue';
+interface Transaction {
+  id: number;
+  text: string;
+  amount: number;
+}
 
 const isModalOpen = ref(false);
-const isEditModalOpen = ref(false);
-const transactions = ref([]);
-const editingTransaction = ref({
-  id: 0,
-  text: '',
-  amount: 0
-});
+const transactions = ref<Transaction[]>([
+  { id: 1, text: 'Flower', amount: -19.99 },
+  { id: 2, text: 'Salary', amount: 299.97 },
+  { id: 3, text: 'Book', amount: -10 },
+  { id: 4, text: 'Camera', amount: 150 }
+]);
 
 const newTransaction = ref({
   text: '',
   amount: ''
 });
 
-const showDeleteAlert = ref(false);
-const transactionToDelete = ref(null);
-
 const isValidTransaction = computed(() => {
   return newTransaction.value.text && newTransaction.value.amount;
-});
-
-const isValidEditTransaction = computed(() => {
-  return editingTransaction.value.text && editingTransaction.value.amount;
 });
 
 const totalBalance = computed(() => {
@@ -261,95 +163,20 @@ const closeModal = () => {
   newTransaction.value.amount = '';
 };
 
-const openEditModal = (transaction) => {
-  editingTransaction.value = { ...transaction };
-  isEditModalOpen.value = true;
-};
-
-const closeEditModal = () => {
-  isEditModalOpen.value = false;
-  editingTransaction.value = {
-    id: 0,
-    text: '',
-    amount: 0
-  };
-};
-
-const addTransaction = async () => {
-  try {
-    if (isValidTransaction.value) {
-      const newTransactionItem = {
-        id: Date.now(),
-        text: newTransaction.value.text,
-        amount: parseFloat(newTransaction.value.amount)
-      };
-      
-      transactions.value.push(newTransactionItem);
-      await setData(STORAGE_KEYS.TRANSACTIONS, transactions.value);
-      closeModal();
-    }
-  } catch (error) {
-    console.error('Error adding transaction:', error);
-    // You could add a toast notification here
+const addTransaction = () => {
+  if (isValidTransaction.value) {
+    transactions.value.push({
+      id: Date.now(),
+      text: newTransaction.value.text,
+      amount: parseFloat(newTransaction.value.amount)
+    });
+    closeModal();
   }
 };
 
-const updateTransaction = async () => {
-  try {
-    if (editingTransaction.value && isValidEditTransaction.value) {
-      const index = transactions.value.findIndex(t => t.id === editingTransaction.value?.id);
-      if (index !== -1) {
-        transactions.value[index] = {
-          id: editingTransaction.value.id,
-          text: editingTransaction.value.text || '',
-          amount: Number(editingTransaction.value.amount)
-        };
-        await setData(STORAGE_KEYS.TRANSACTIONS, transactions.value);
-        closeEditModal();
-      }
-    }
-  } catch (error) {
-    console.error('Error updating transaction:', error);
-    // You could add a toast notification here
-  }
+const deleteTransaction = (id: number) => {
+  transactions.value = transactions.value.filter(t => t.id !== id);
 };
-
-const handleDelete = (event, id) => {
-  event.stopPropagation();
-  transactionToDelete.value = id;
-  showDeleteAlert.value = true;
-};
-
-const confirmDelete = async () => {
-  if (transactionToDelete.value) {
-    await deleteTransaction(transactionToDelete.value);
-    transactionToDelete.value = null;
-  }
-};
-
-const deleteTransaction = async (id) => {
-  try {
-    transactions.value = transactions.value.filter(t => t.id !== id);
-    await setData(STORAGE_KEYS.TRANSACTIONS, transactions.value);
-  } catch (error) {
-    console.error('Error deleting transaction:', error);
-    // You could add a toast notification here
-  }
-};
-
-// Initialize storage and load transactions
-onMounted(async () => {
-  try {
-    await initStorage();
-    const storedTransactions = await getData(STORAGE_KEYS.TRANSACTIONS);
-    if (storedTransactions) {
-      transactions.value = storedTransactions;
-    }
-  } catch (error) {
-    console.error('Error loading transactions:', error);
-    // You could add a toast notification here
-  }
-});
 </script>
 
 <style scoped>
@@ -587,22 +414,5 @@ ion-item-option {
 .transaction-modal .form-card {
   box-shadow: none;
   background: transparent;
-}
-
-.amount-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.delete-button {
-  --padding-start: 4px;
-  --padding-end: 4px;
-  height: 24px;
-  margin: 0;
-}
-
-.delete-button ion-icon {
-  font-size: 18px;
 }
 </style>
