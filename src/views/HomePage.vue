@@ -25,7 +25,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import { ref } from 'vue';
 import { addOutline } from 'ionicons/icons';
@@ -33,14 +33,8 @@ import BalanceCard from '@/components/BalanceCard.vue';
 import TransactionList from '@/components/TransactionList.vue';
 import AddTransactionModal from '@/components/AddTransactionModal.vue';
 
-interface Transaction {
-  id: number;
-  text: string;
-  amount: number;
-}
-
 const isModalOpen = ref(false);
-const transactions = ref<Transaction[]>([
+const transactions = ref([
   { id: 1, text: 'Flower', amount: -19.99 },
   { id: 2, text: 'Salary', amount: 299.97 },
   { id: 3, text: 'Book', amount: -10 },
@@ -55,14 +49,14 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-const addTransaction = (transaction: { text: string; amount: number }) => {
+const addTransaction = (transaction) => {
   transactions.value.push({
     id: Date.now(),
     ...transaction
   });
 };
 
-const deleteTransaction = (id: number) => {
+const deleteTransaction = (id) => {
   transactions.value = transactions.value.filter(t => t.id !== id);
 };
 </script>

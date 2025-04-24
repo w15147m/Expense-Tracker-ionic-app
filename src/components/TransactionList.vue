@@ -17,25 +17,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonList, IonIcon } from '@ionic/vue';
 import { timeOutline } from 'ionicons/icons';
 import TransactionItem from './TransactionItem.vue';
 
-interface Props {
+const props = defineProps({
   transactions: {
-    id: number;
-    text: string;
-    amount: number;
-  }[];
-}
+    type: Array,
+    required: true
+  }
+});
 
-const props = defineProps<Props>();
-const emit = defineEmits<{
-  (e: 'delete', id: number): void;
-}>();
+const emit = defineEmits(['delete']);
 
-const onDelete = (id: number) => {
+const onDelete = (id) => {
   emit('delete', id);
 };
 </script>

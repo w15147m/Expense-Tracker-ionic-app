@@ -17,22 +17,18 @@
   </ion-item-sliding>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonItemSliding, IonItem, IonLabel, IonNote, IonItemOption, IonItemOptions, IonIcon } from '@ionic/vue';
 import { trashOutline } from 'ionicons/icons';
 
-interface Props {
+const props = defineProps({
   transaction: {
-    id: number;
-    text: string;
-    amount: number;
-  };
-}
+    type: Object,
+    required: true
+  }
+});
 
-defineProps<Props>();
-defineEmits<{
-  (e: 'delete', id: number): void;
-}>();
+defineEmits(['delete']);
 </script>
 
 <style scoped>

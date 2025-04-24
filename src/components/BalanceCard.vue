@@ -22,19 +22,16 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonCard, IonRow, IonCol } from '@ionic/vue';
 import { computed } from 'vue';
 
-interface Props {
+const props = defineProps({
   transactions: {
-    id: number;
-    text: string;
-    amount: number;
-  }[];
-}
-
-const props = defineProps<Props>();
+    type: Array,
+    required: true
+  }
+});
 
 const totalBalance = computed(() => {
   return props.transactions.reduce((acc, curr) => acc + curr.amount, 0);

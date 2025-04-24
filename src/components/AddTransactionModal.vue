@@ -48,24 +48,21 @@
   </ion-modal>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, 
          IonIcon, IonContent, IonCard, IonCardContent, IonItem, IonLabel, 
          IonInput } from '@ionic/vue';
 import { ref, computed } from 'vue';
 import { addOutline, closeOutline } from 'ionicons/icons';
 
-interface Props {
-  isOpen: boolean;
-}
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true
+  }
+});
 
-interface Emits {
-  (e: 'close'): void;
-  (e: 'add', transaction: { text: string; amount: number }): void;
-}
-
-const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+const emit = defineEmits(['close', 'add']);
 
 const newTransaction = ref({
   text: '',
