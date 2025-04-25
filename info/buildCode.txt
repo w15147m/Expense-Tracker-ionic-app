@@ -1,0 +1,17 @@
+1. From your Ionic project root:
+
+ionic build
+
+This compiles your app into the www folder.
+
+2. Sync with Capacitor
+
+npx cap copy
+
+This copies your built web assets into the Android native project.
+
+3. Open Android Studio
+
+ionic cap open android
+
+Android Studio will open with your project. Now:
