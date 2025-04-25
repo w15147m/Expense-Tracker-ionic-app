@@ -7,13 +7,13 @@
         <ion-col>
           <div class="income-expense">
             <h3>INCOME</h3>
-            <p class="income">+${{ totalIncome.toFixed(2) }}</p>
+            <p class="income">+${{ totalIncome.toFixed(0) }}</p>
           </div>
         </ion-col>
         <ion-col class="divider">
           <div class="income-expense">
             <h3>EXPENSE</h3>
-            <p class="expense">-${{ totalExpense.toFixed(2) }}</p>
+            <p class="expense">-${{ totalExpense.toFixed(0) }}</p>
           </div>
         </ion-col>
       </ion-row>
@@ -53,7 +53,7 @@ const totalExpense = computed(() => {
 .balance-section {
   text-align: center;
   margin-bottom: 24px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .balance-label {
@@ -71,7 +71,7 @@ const totalExpense = computed(() => {
 }
 
 .summary-card {
-  margin: 20px 0;
+  margin: 15px 0;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   background: rgba(40, 40, 50, 0.8);
@@ -79,7 +79,7 @@ const totalExpense = computed(() => {
 
 .income-expense {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 .income-expense h3 {
@@ -96,14 +96,14 @@ const totalExpense = computed(() => {
 
 .income {
   color: #4caf50;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
   margin: 10px 0;
 }
 
 .expense {
   color: #f44336;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
   margin: 10px 0;
 }
