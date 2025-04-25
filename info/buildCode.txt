@@ -15,3 +15,10 @@ This copies your built web assets into the Android native project.
 ionic cap open android
 
 Android Studio will open with your project. Now:
+
+Sync Changes
+
+Change Made | Confirm in…
+App build |ionic build
+Synced to Android | npx cap copy and npx cap sync
+Open in Android Studio | npx cap open android
