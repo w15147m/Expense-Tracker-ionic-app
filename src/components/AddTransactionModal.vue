@@ -1,11 +1,11 @@
 <template>
-  <ion-modal :is-open="isOpen" @didDismiss="onClose" class="h-px-400 br-16 br-t-16 br-b-0">
+  <ion-modal :is-open="isOpen" @didDismiss="onClose" class="transaction-modal">
     <ion-header>
-      <ion-toolbar class="bg-dark text-white">
+      <ion-toolbar>
         <ion-title>Add Transaction</ion-title>
         <template v-slot:end>
           <ion-buttons>
-            <ion-button @click="onClose" class="text-white">
+            <ion-button @click="onClose">
               <ion-icon :icon="closeOutline"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -14,34 +14,34 @@
     </ion-header>
 
     <ion-content class="ion-padding">
-      <ion-card class="br-16 bg-dark-50 pd-20">
+      <ion-card class="form-card">
         <ion-card-content>
-          <div class="m-b-20">
-            <ion-item class="bg-transparent pd-0 m-b-8">
-              <ion-label position="stacked" class="text-white m-b-8">Description</ion-label>
+          <div class="form-group">
+            <ion-item class="custom-input">
+              <ion-label position="stacked">Description</ion-label>
               <ion-input 
                 v-model="newTransaction.text" 
                 placeholder="What's this transaction?"
-                class="bg-white-10 br-8 pd-12 text-white">
+                class="input-field">
               </ion-input>
             </ion-item>
           </div>
 
-          <div class="m-b-20">
-            <ion-item class="bg-transparent pd-0 m-b-8">
-              <ion-label position="stacked" class="text-white m-b-8">Amount</ion-label>
+          <div class="form-group">
+            <ion-item class="custom-input">
+              <ion-label position="stacked">Amount</ion-label>
               <ion-input 
                 v-model="newTransaction.amount" 
                 type="number" 
                 placeholder="Enter amount (- for expense)"
-                class="bg-white-10 br-8 pd-12"
-                :class="newTransaction.amount && newTransaction.amount > 0 ? 'text-success' : newTransaction.amount < 0 ? 'text-danger' : 'text-white'">
+                class="input-field"
+                :class="newTransaction.amount && newTransaction.amount > 0 ? 'income-input' : newTransaction.amount < 0 ? 'expense-input' : ''">
               </ion-input>
             </ion-item>
           </div>
 
-          <ion-button expand="block" @click="onAdd" class="bg-success br-12 fw-600 h-px-48 m-t-24" :disabled="!isValidTransaction">
-            <ion-icon :icon="addOutline"></ion-icon>
+          <ion-button expand="block" @click="onAdd" class="save-button" :disabled="!isValidTransaction">
+            <ion-icon :icon="addOutline" class="button-icon"></ion-icon>
             Add Transaction
           </ion-button>
         </ion-card-content>
@@ -89,4 +89,87 @@ const onAdd = () => {
     onClose();
   }
 };
-</script> 
+</script>
+
+<style scoped>
+.transaction-modal {
+  --height: 400px;
+  --border-radius: 16px 16px 0 0;
+}
+
+.transaction-modal ion-toolbar {
+  --background: #1e1e2e;
+  --color: white;
+}
+
+.transaction-modal ion-toolbar ion-button {
+  --color: white;
+}
+
+.form-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(40, 40, 50, 0.8);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.custom-input {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 8px;
+}
+
+.custom-input ion-label {
+  color: #e0e0e0;
+  margin-bottom: 8px;
+}
+
+.input-field {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.income-input {
+  color: #4caf50;
+}
+
+.expense-input {
+  color: #f44336;
+}
+
+.save-button {
+  margin-top: 24px;
+  --background: #4caf50;
+  --background-hover: #45a049;
+  --border-radius: 12px;
+  font-weight: 600;
+  height: 48px;
+}
+
+.button-icon {
+  margin-right: 8px;
+}
+
+.save-button:hover {
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .transaction-modal {
+    --width: 400px;
+    --height: 450px;
+    --border-radius: 16px;
+  }
+}
+</style> 
