@@ -13,14 +13,26 @@ class StorageService {
   }
 
   async getTransactions() {
-    const transactions = await this.storage.get(TRANSACTIONS_KEY);
-    if (!transactions) return [];
-    
-    // Ensure amounts are numbers
-    return transactions.map(t => ({
-      ...t,
-      amount: Number(t.amount)
-    }));
+    try {
+      const transactions = await this.storage.get(TRANSACTIONS_KEY);
+      if (!transactions) return [];
+      
+      // Ensure transactions is an array
+      if (!Array.isArray(transactions)) {
+        console.warn('Transactions data is corrupted, resetting to empty array');
+        await this.saveTransactions([]);
+        return [];
+      }
+      
+      // Ensure amounts are numbers
+      return transactions.map(t => ({
+        ...t,
+        amount: Number(t.amount)
+      }));
+    } catch (error) {
+      console.error('Error getting transactions:', error);
+      return [];
+    }
   }
 
   async saveTransactions(transactions) {
