@@ -1,8 +1,0 @@
-UPDATE employees SET verified_at = NOW() WHERE verified_at IS NULL;
-php artisan db:seed --class=DefaultSeeder
-
-UPDATE `projects` SET `group_id` = NULL;
-or
-php artisan tinker
-\DB::table('projects')->update(['group_id' => null]);
-exit

@@ -1,20 +1,19 @@
 <template>
-  <div class="text-center m-b-24 pd-20">
-    <h2 class="text-gray-400 fs-16 fw-600 m-0">YOUR BALANCE</h2>
-    <h1 class="fs-40 fw-700 m-10-0 text-white">${{ totalBalance.toFixed(2) }}</h1>
-
-    <ion-card class="br-16 shadow-4 bg-dark-50 m-20-0">
+  <div class="balance-section">
+    <h2 class="balance-label">YOUR BALANCE</h2>
+    <h1 class="balance-amount">${{ totalBalance.toFixed(2) }}</h1>
+    <ion-card class="summary-card">
       <ion-row>
         <ion-col>
-          <div class="text-center pd-20">
-            <h3 class="m-0 text-uppercase fs-14 fw-600 text-gray-400">INCOME</h3>
-            <p class="text-success fs-24 fw-700 m-10-0">+${{ totalIncome.toFixed(2) }}</p>
+          <div class="income-expense">
+            <h3>INCOME</h3>
+            <p class="income">+${{ totalIncome.toFixed(2) }}</p>
           </div>
         </ion-col>
-        <ion-col class="border-l-1 border-dark-100">
-          <div class="text-center pd-20">
-            <h3 class="m-0 text-uppercase fs-14 fw-600 text-gray-400">EXPENSE</h3>
-            <p class="text-danger fs-24 fw-700 m-10-0">-${{ totalExpense.toFixed(2) }}</p>
+        <ion-col class="divider">
+          <div class="income-expense">
+            <h3>EXPENSE</h3>
+            <p class="expense">-${{ totalExpense.toFixed(2) }}</p>
           </div>
         </ion-col>
       </ion-row>
@@ -54,18 +53,18 @@ const totalExpense = computed(() => {
 .balance-section {
   text-align: center;
   margin-bottom: 24px;
-  padding: 20px 0;
+  padding: 20px;
 }
 
 .balance-label {
   color: #a0a0a0;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
 }
 
 .balance-amount {
-  font-size: 2.5rem;
+  font-size: 40px;
   font-weight: 700;
   margin: 10px 0;
   color: #ffffff;
@@ -80,13 +79,13 @@ const totalExpense = computed(() => {
 
 .income-expense {
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
 }
 
 .income-expense h3 {
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 600;
   color: #a0a0a0;
 }
@@ -97,14 +96,14 @@ const totalExpense = computed(() => {
 
 .income {
   color: #4caf50;
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 700;
   margin: 10px 0;
 }
 
 .expense {
   color: #f44336;
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 700;
   margin: 10px 0;
 }
