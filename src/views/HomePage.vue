@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title class="ion-text-center fw-boldest font-20 text-white">💰 Expense Tracker</ion-title>
+        <ion-title class="ion-text-center fw-boldest font-20 text-white">💰 Tracker</ion-title>
       </ion-toolbar>
     </ion-header>
 
