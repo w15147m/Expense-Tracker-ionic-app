@@ -20,5 +20,5 @@ Sync Changes
 
 Change Made | Confirm in…
 App build |ionic build
-Synced to Android | npx cap copy and npx cap sync
+Synced to Android | npx cap copy
 Open in Android Studio | npx cap open android
