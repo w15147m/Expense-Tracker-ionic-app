@@ -23,7 +23,7 @@ import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
 /* Ionicons CSS */
-import '@ionic/vue/css/ionic.bundle.css';
+import '@ionic/core/css/ionic.bundle.css';
 
 /**
  * Ionic Dark Mode
@@ -45,7 +45,9 @@ addIcons({
 });
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    mode: 'ios' // or 'md' for Material Design
+  })
   .use(router);
 
 router.isReady().then(() => {
