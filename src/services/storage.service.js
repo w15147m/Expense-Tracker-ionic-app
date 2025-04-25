@@ -1,6 +1,5 @@
 import { Storage } from '@ionic/storage';
-
-const TRANSACTIONS_KEY = 'transactions';
+import { authService } from './auth.service';
 
 class StorageService {
   constructor() {
@@ -12,9 +11,19 @@ class StorageService {
     await this.storage.create();
   }
 
+  getUserTransactionsKey(userEmail) {
+    return `transactions_${userEmail}`;
+  }
+
   async getTransactions() {
     try {
-      const transactions = await this.storage.get(TRANSACTIONS_KEY);
+      const currentUser = await authService.getCurrentUser();
+      if (!currentUser) {
+        console.warn('No user logged in');
+        return [];
+      }
+
+      const transactions = await this.storage.get(this.getUserTransactionsKey(currentUser.email));
       if (!transactions) return [];
       
       // Ensure transactions is an array
@@ -36,27 +45,46 @@ class StorageService {
   }
 
   async saveTransactions(transactions) {
-    await this.storage.set(TRANSACTIONS_KEY, transactions);
+    const currentUser = await authService.getCurrentUser();
+    if (!currentUser) {
+      console.warn('No user logged in, cannot save transactions');
+      return;
+    }
+    await this.storage.set(this.getUserTransactionsKey(currentUser.email), transactions);
   }
 
   async addTransaction(transaction) {
+    const currentUser = await authService.getCurrentUser();
+    if (!currentUser) {
+      console.warn('No user logged in, cannot add transaction');
+      return [];
+    }
+
     const transactions = await this.getTransactions();
     transactions.push({
       ...transaction,
-      amount: Number(transaction.amount)
+      amount: Number(transaction.amount),
+      userId: currentUser.email // Add user ID to transaction
     });
     await this.saveTransactions(transactions);
     return transactions;
   }
 
   async editTransaction(id, updatedTransaction) {
+    const currentUser = await authService.getCurrentUser();
+    if (!currentUser) {
+      console.warn('No user logged in, cannot edit transaction');
+      return [];
+    }
+
     const transactions = await this.getTransactions();
-    const index = transactions.findIndex(t => t.id === id);
+    const index = transactions.findIndex(t => t.id === id && t.userId === currentUser.email);
     if (index !== -1) {
       transactions[index] = {
         ...transactions[index],
         ...updatedTransaction,
-        amount: Number(updatedTransaction.amount)
+        amount: Number(updatedTransaction.amount),
+        userId: currentUser.email
       };
       await this.saveTransactions(transactions);
     }
@@ -64,8 +92,14 @@ class StorageService {
   }
 
   async deleteTransaction(id) {
+    const currentUser = await authService.getCurrentUser();
+    if (!currentUser) {
+      console.warn('No user logged in, cannot delete transaction');
+      return [];
+    }
+
     const transactions = await this.getTransactions();
-    const updatedTransactions = transactions.filter(t => t.id !== id);
+    const updatedTransactions = transactions.filter(t => !(t.id === id && t.userId === currentUser.email));
     await this.saveTransactions(updatedTransactions);
     return updatedTransactions;
   }
